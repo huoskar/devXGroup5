@@ -16,7 +16,7 @@ ss = spotipy.Spotify(auth=token)
 
 list = []
 
-def getPersonalizedRecent():
+def getPersonalizedPlaylists():
     results = ss.current_user_playlists()
     for item in results['items']:
        image_list =  item['id']
@@ -33,5 +33,5 @@ def getPersonalizedRecent():
 
 
 
-getPersonalizedRecent()
+getPersonalizedPlaylists()
 
