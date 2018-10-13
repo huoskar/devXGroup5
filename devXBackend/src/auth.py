@@ -43,8 +43,8 @@ def download_image_from_url(image_url, full_file_name, dictionary):
 
     #color = color_pic.getpixel((0, 0))
     
-    # Split each color value into batch (of 32) 8x8x8 possible colors
-    color = np.round(np.array(color_pic)/32)
+    # Split each color value into batch (of 16) 16x16x16 possible colors
+    color = np.round(np.array(color_pic)/16)
     color = tuple(color[0][0])
 
     # Add the file_name to the dictionary for the color combination
@@ -106,13 +106,13 @@ def download_album_categorical_playlists(dictionary,category = 'chill',n_playlis
 
 
 def update_all_general_images_and_dicts():
-    featured_dict = {}
-    download_album_featured_playlists(dictionary = featured_dict, folder_name = 'featured')
-    np.save('featured_dict.npy', featured_dict)     
+    #featured_dict = {}
+    #download_album_featured_playlists(dictionary = featured_dict, folder_name = 'featured')
+    #np.save('featured_dict.npy', featured_dict)     
 
-    #chill_dict = {}
-    #download_album_categorical_playlists(dictionary = chill_dict, category = 'chill', folder_name = 'chill')
-    #np.save('chill_dict.npy', chill_dict)  
+    chill_dict = {}
+    download_album_categorical_playlists(dictionary = chill_dict, category = 'chill', folder_name = 'chill')
+    np.save('chill_dict.npy', chill_dict)  
     
     #hiphop_dict = {}
     #download_album_categorical_playlists(dictionary = hiphop_dict, category = 'hiphop', folder_name = 'hiphop')
