@@ -1,0 +1,3 @@
+export SPOTIPY_CLIENT_ID='bf050439613e46a698879a7317ae2d9b'
+export SPOTIPY_CLIENT_SECRET='2d346cde651842f6b9bafa6c1ea8663a'
+export SPOTIPY_REDIRECT_URI='your-app-redirect-url'
