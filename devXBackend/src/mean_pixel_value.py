@@ -71,28 +71,31 @@ def main():
     resize_input_img(test_pic2)
     album_list = make_album_list()
     print(len(album_list)) # Number of albums availale
-    # big_tiles = image_slicer.slice('resize_input_img', 8)
-    # for big_tile in big_tiles:
-
-    tiles = image_slicer.slice('resize_input_image.jpg', 1024) # wrong dir
-    for tile in tiles:
-        if tile.filename == 'resize_input_image_16_02.png': # Stop the opening
-            break
-        print(tile.filename)
-        image = Image.open(tile.filename)
-        #closest_image = closest_img(pic, album_list)
-        color_pic = image.resize((1,1))
-        color = np.round(np.array(color_pic)/32)
-        color = tuple(color[0][0])
-        if color in featured_dict.keys():
-            closest_image_filenames = featured_dict[color]
-            rand = random.randint(0,len(closest_image_filenames) - 1)
-            closest_image_filename = closest_image_filenames[rand]
-        closest_image = Image.open(closest_image_filename)
-        closest_image.save(tile.filename)
-        tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
-    final_pic = image_slicer.join(tiles)
-    final_pic.save('result.png')
+    big_tiles = image_slicer.slice('resize_input_image.jpg', 16)
+    for big_tile in big_tiles:
+        # resize_input_image.jpg
+        tiles = image_slicer.slice(big_tile.filename, 8) #16 för 16,16 , annars dir 1024
+        for tile in tiles:
+            if tile.filename == 'resize_input_image_09_02.png': # Stop the opening
+                break
+            print(tile.filename)
+            image = Image.open(tile.filename)
+            #closest_image = closest_img(pic, album_list)
+            color_pic = image.resize((1,1))
+            color = np.round(np.array(color_pic)/32)
+            color = tuple(color[0][0])
+            if color in featured_dict.keys():
+                closest_image_filenames = featured_dict[color]
+                rand = random.randint(0,len(closest_image_filenames) - 1)
+                closest_image_filename = closest_image_filenames[rand]
+                closest_image = Image.open(closest_image_filename)
+                closest_image.save(tile.filename)
+                tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
+        final_pic = image_slicer.join(tiles)
+        final_pic.save(big_tile.filename)
+        big_tile.image = Image.open(big_tile.filename)
+    final_ful_pic = image_slicer.join(big_tiles)
+    final_ful_pic.save('result.png')
 
 
 # Values for testing functions
