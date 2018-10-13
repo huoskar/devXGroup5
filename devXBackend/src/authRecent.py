@@ -19,16 +19,19 @@ list = []
 def getPersonalizedRecent():
     results = ss.current_user_playlists()
     for item in results['items']:
-       # print item
-        image_list =  item['id']
-        playlist_tracks = #
-        print image_list
-        for image in image_list:
+       image_list =  item['id']
+       
+       playlist_tracks = ss.user_playlist_tracks(user = username, playlist_id = image_list, limit =50 )
+        #print(playlist_tracks['items']) 
+    for names in playlist_tracks['items']:
+            image_list = names['track']['album']['images']
             if (len(image_list) != 0):
-                image = image_list[-1]['url']
-                print image_list
-                list.append(image)
+                # take the smallest image out of the list of album art
+                image_url = image_list[-1]['url']
+                list.append(image_url)
     return list
 
-                
-print getPersonalizedRecent()
+
+
+getPersonalizedRecent()
+
