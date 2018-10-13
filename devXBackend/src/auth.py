@@ -1,13 +1,12 @@
 import spotipy
 import spotipy.util as util
 import sys
-
-
+import os
 import numpy as np
-
-
 import urllib.request
 
+from PIL import Image
+from resizeimage import resizeimage
 
 #username = 'greedosan' #placeholder value here
 client_id = '64c8c6d551c74a7c90e8db5c2cb42ace' #placeholder value here
@@ -27,25 +26,18 @@ token = util.prompt_for_user_token(username, scope, client_id, client_secret, re
 
 sp = spotipy.Spotify(auth=token)
 
-#if token:  
-#    results = sp.current_user_saved_tracks()
-#    for item in results['items']:
-#        track = item['track']
-#        print (track['name'] + ' - ' + track['artists'][0]['name'])
-#else:
-#    print ("Can't get token for", username)
 
-#name = "Post Malone"
-#results = sp.search(q='artist:' + name, type='artist')
+# Download album
+def download_album_from_playlists(results, n_tracks = 100, folder_name = 'pics', starting_index = 0):
+    index = starting_index
+    
+   # Create target Directory if it doesnt exist
+    if not os.path.exists(folder_name):
+        os.mkdir(folder_name)
 
-# General album covers from featured playlists
-def download_album_featured_playlists(n_playlists = 50, n_tracks = 100, folder_name = 'pics'):
-    results = sp.featured_playlists(limit=n_playlists)
 
-    #print(results['playlists']['items'])
-    index = 0
-    for playlists in results['playlists']['items']:
-        playlist_id = playlists['id']
+    for playlist in results['playlists']['items']:
+        playlist_id = playlist['id']
         playlist_tracks = sp.user_playlist_tracks(user = username, playlist_id = playlist_id, limit =n_tracks )
         #print(playlist_tracks['items']) 
         for names in playlist_tracks['items']:
@@ -62,18 +54,19 @@ def download_album_featured_playlists(n_playlists = 50, n_tracks = 100, folder_n
 
                 # Download image from url
                 urllib.request.urlretrieve(image_url,full_file_name)
-            
-        #print(playlist_tracks['images'])    
-        #for tracks in playlist_tracks:
-        #    print(tracks)   
-        #print(sp.search(q='playlist:' + playlist_id, type = 'playlist'))
-
-#def download_personalized_playlist()
-
-#download_album_featured_playlists()
-#    print(item)
-    
-#print (results['artists'])
 
 
+# General album covers from featured playlists
+def download_album_featured_playlists(n_playlists = 50, n_tracks = 100, folder_name = 'featured', starting_index = 0):
+    results = sp.featured_playlists(limit=n_playlists)    
+    download_album_from_playlists(results, n_tracks = n_tracks, folder_name = folder_name, starting_index = starting_index)
+
+
+def download_album_categorical_playlists(category = 'chill',n_playlists= 50, n_tracks = 100, folder_name = 'chill', starting_index = 0):
+    results = sp.category_playlists(category_id = category, limit = n_playlists)
+    download_album_from_playlists(results, n_tracks = n_tracks, folder_name = folder_name, starting_index = starting_index)
+
+
+
+download_album_featured_playlists()
 
