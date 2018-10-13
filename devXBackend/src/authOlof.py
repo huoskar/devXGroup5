@@ -83,16 +83,19 @@ def download_image_from_url(image_url, full_file_name, dictionary):
     color = np.round(np.array(color_pic)/32)
     color = tuple(color[0][0])
 
-    # Maybe save again
-    dictionary[color] = full_file_name
-    
+    # Add the file_name to the dictionary for the color combination
+    if color in dictionary.keys():
+        dictionary[color].append(full_file_name)
+    else:
+        
+        dictionary[color] = [full_file_name]
     # Saves in dictionary and folder
 
     image.save(full_file_name)
 
 
 # Download album
-def download_album_from_playlists(results, n_tracks = 100, folder_name = 'pics', starting_index = 0, dictionary):
+def download_album_from_playlists(results, dictionary, n_tracks = 100, folder_name = 'pics', starting_index = 0):
     index = starting_index
     
    # Create target Directory if it doesnt exist
@@ -143,32 +146,52 @@ def update_all_general_images_and_dicts():
     download_album_featured_playlists(dictionary = featured_dict, folder_name = 'featured')
     np.save('featured_dict.npy', featured_dict)     
 
-    chill_dict = {}
-    download_album_categorical_playlists(dictionary = chill_dict, category = 'chill', folder_name = 'chill')
-    np.save('featured_dict.npy', featured_dict)  
+    #chill_dict = {}
+    #download_album_categorical_playlists(dictionary = chill_dict, category = 'chill', folder_name = 'chill')
+    #np.save('chill_dict.npy', chill_dict)  
     
-    hiphop_dict = {}
-    download_album_categorical_playlists(dictionary = hiphop_dict, category = 'hiphop', folder_name = 'hiphop')
-    np.save('featured_dict.npy', featured_dict)  
+    #hiphop_dict = {}
+    #download_album_categorical_playlists(dictionary = hiphop_dict, category = 'hiphop', folder_name = 'hiphop')
+    #np.save('hiphop_dict .npy', hiphop_dict )  
     
-    rock_dict = {}    
-    download_album_categorical_playlists(dictionary = rock_dict, category = 'rock', folder_name = 'rock')
-    jazz_dict = {}   
-    download_album_categorical_playlists(dictionary = jazz_dict, category = 'jazz', folder_name = 'jazz')
-    reggae_dict = {}    
-    download_album_categorical_playlists(dictionary = reggae_dict, category = 'reggae', folder_name = 'reggae')
-    edm_dance_dict = {}    
-    download_album_categorical_playlists(dictionary = edm_dance_dict, category = 'edm_dance', folder_name = 'edm_dance')
-    rnb_dict = {}
-    download_album_categorical_playlists(dictionary = rnb_dict, category = 'rnb', folder_name = 'rnb')
-    classical_dict={}    
-    download_album_categorical_playlists(dictionary = classical_dict, category = 'classical', folder_name = 'classical')
-    metal_dict={}    
-    download_album_categorical_playlists(dictionary = metal_dict, category = 'metal', folder_name = 'metal')
-    country_dict={}    
-    download_album_categorical_playlists(dictionary = country_dict, category = 'country', folder_name = 'country')
+    #rock_dict = {}    
+    #download_album_categorical_playlists(dictionary = rock_dict, category = 'rock', folder_name = 'rock')
+    #np.save('rock_dict.npy', rock_dict )  
+    
+    #jazz_dict = {}   
+    #download_album_categorical_playlists(dictionary = jazz_dict, category = 'jazz', folder_name = 'jazz')
+    #np.save('jazz_dict.npy', jazz_dict )  
+    
+    #reggae_dict = {}    
+    #download_album_categorical_playlists(dictionary = reggae_dict, category = 'reggae', folder_name = 'reggae')
+    #np.save('reggae_dict.npy', reggae_dict )  
 
+    #edm_dance_dict = {}    
+    #download_album_categorical_playlists(dictionary = edm_dance_dict, category = 'edm_dance', folder_name = 'edm_dance')
+    #np.save('edm_dance_dict.npy', edm_dance_dict )  
 
+    #rnb_dict = {}
+    #download_album_categorical_playlists(dictionary = rnb_dict, category = 'rnb', folder_name = 'rnb')
+    #np.save('rnb_dict.npy', rnb_dict )  
+
+    #classical_dict={}    
+    #download_album_categorical_playlists(dictionary = classical_dict, category = 'classical', folder_name = 'classical')
+    #np.save('classical_dict.npy', classical_dict )  
+
+    #metal_dict={}    
+    #download_album_categorical_playlists(dictionary = metal_dict, category = 'metal', folder_name = 'metal')
+    #np.save('metal_dict.npy', metal_dict )  
+
+    #country_dict={}    
+    #download_album_categorical_playlists(dictionary = country_dict, category = 'country', folder_name = 'country')
+    #np.save('country_dict.npy', country_dict )  
+
+    
+    #chill_dict = np.load('chill_dict.npy').item()
+    #country_dict = np.load('country_dict.npy').item()
+    
+
+update_all_general_images_and_dicts()
 #download_image_from_url('https://i.scdn.co/image/46a1dcfa844e7fb2aeee759f70d333b9b95f0742', 'asd.jpg')
   
 
