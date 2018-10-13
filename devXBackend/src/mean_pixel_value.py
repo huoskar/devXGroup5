@@ -7,6 +7,7 @@ from PIL import Image
 #### TODO
 # Outprint a mean pixel value picture
 # Fix main function when joining sliced image
+# Divide input_picture to 4 or 8 smaler picture. Iterative over the joining
 # Add error checks for easier development.
 
 
