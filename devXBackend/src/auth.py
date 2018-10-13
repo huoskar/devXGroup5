@@ -35,7 +35,7 @@ def download_image_from_url(image_url, full_file_name, dictionary):
     urllib.request.urlretrieve(image_url,full_file_name)
     # Open and resize image
     image = Image.open(full_file_name)
-    image = image.resize((32,32))
+    image = image.resize((16,16))
 
 
     # Find average color of image
