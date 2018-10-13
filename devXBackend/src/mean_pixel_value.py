@@ -1,5 +1,6 @@
 import cv2
-import numpy
+import random
+import numpy as np
 import os
 import image_slicer
 from PIL import Image
@@ -66,17 +67,29 @@ def input_to_fragments(img):
 
 # Main function, opacity
 def main():
+    featured_dict = np.load('featured_dict.npy').item()
     resize_input_img(test_pic2)
     album_list = make_album_list()
-    print(len(album_list)) # Number of albums available
-    tiles = image_slicer.slice('resize_input_image.jpg', 256) # wrong dir
+    print(len(album_list)) # Number of albums availale
+    # big_tiles = image_slicer.slice('resize_input_img', 8)
+    # for big_tile in big_tiles:
+
+    tiles = image_slicer.slice('resize_input_image.jpg', 1024) # wrong dir
     for tile in tiles:
         if tile.filename == 'resize_input_image_16_02.png': # Stop the opening
             break
         print(tile.filename)
-        pic = cv2.imread(tile.filename)
-        closest_image = closest_img(pic, album_list)
-        cv2.imwrite(tile.filename, closest_image)
+        image = Image.open(tile.filename)
+        #closest_image = closest_img(pic, album_list)
+        color_pic = image.resize((1,1))
+        color = np.round(np.array(color_pic)/32)
+        color = tuple(color[0][0])
+        if color in featured_dict.keys():
+            closest_image_filenames = featured_dict[color]
+            rand = random.randint(0,len(closest_image_filenames) - 1)
+            closest_image_filename = closest_image_filenames[rand]
+        closest_image = Image.open(closest_image_filename)
+        closest_image.save(tile.filename)
         tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
     final_pic = image_slicer.join(tiles)
     final_pic.save('result.png')
