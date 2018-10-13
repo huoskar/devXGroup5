@@ -39,12 +39,24 @@ def closest_img(img, img_list):
 
     return closest
 
+# Dict find cloesest colot
+def closest_dict(dic_list, color):
+    closest = dic_list[0]
+    closest_distance = numpy.linalg.norm(color - closest)
+    for dic_col in dic_list:
+        temp_distance = numpy.linalg.norm(dic_col - color)
+        if temp_distance < closest_distance:
+            closest = dic_col
+            closest_distance = temp_distance
+
+    return closest
+
 # Function for making list of all album files
 def make_album_list():
     album_list = []
-    files = os.listdir('featured')
+    files = os.listdir('chill')
     for fil in files:
-        album_list.append(cv2.imread('featured/' + fil))
+        album_list.append(cv2.imread('chill/' + fil))
     return album_list
 
 # Resize input file cv2 function, with a write, Maybe better with more pixels
@@ -64,10 +76,8 @@ def input_to_fragments(img):
     print(info)
 
     return info
-
-# Main function, opacity
-def main():
-    featured_dict = np.load('featured_dict.npy').item()
+def main2():
+    chill_dict = np.load('chill_dict.npy').item()
     resize_input_img(test_pic2)
     album_list = make_album_list()
     print(len(album_list)) # Number of albums availale
@@ -84,18 +94,41 @@ def main():
             color_pic = image.resize((1,1))
             color = np.round(np.array(color_pic)/32)
             color = tuple(color[0][0])
-            if color in featured_dict.keys():
-                closest_image_filenames = featured_dict[color]
+            if color in chill_dict.keys():
+                closest_image_filenames = chill_dict[color]
                 rand = random.randint(0,len(closest_image_filenames) - 1)
                 closest_image_filename = closest_image_filenames[rand]
-                closest_image = Image.open(closest_image_filename)
-                closest_image.save(tile.filename)
-                tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
+            closest_image = Image.open(closest_image_filename)
+            closest_image.save(tile.filename)
+            tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
         final_pic = image_slicer.join(tiles)
         final_pic.save(big_tile.filename)
         big_tile.image = Image.open(big_tile.filename)
     final_ful_pic = image_slicer.join(big_tiles)
     final_ful_pic.save('result.png')
+
+# Main function, opacity
+def main():
+    chill_dict = np.load('chill_dict.npy').item()
+    resized_img = resize_input_img(test_pic2)
+    album_list = make_album_list()
+    print(len(album_list)) # Number of albums availale
+    output_chunk_list = np.array((32,32))
+    for x in range(0,32):
+        for y in range(0,32):
+            temp = resized_img[(0 + x*16):(16 + x*16),(0 + y*16):(16 + y*16)]
+            color_pic = temp.resize((1,1))
+            color = np.round(np.array(color_pic)/32)
+            color = tuple(color[0][0])
+            if color in chill_dict.keys():
+                closest_image_filenames = chill_dict[color]
+                rand = random.randint(0,len(closest_image_filenames) - 1)
+                closest_image_filename = closest_image_filenames[rand]
+            else:
+               new_color = closest_dict(chill_dict.keys(), color)
+               closest_image_filenames = chill_dict[new_color]
+            output_chunk_list[x,y] = closest_image_filename
+    #final_ful_pic.save('result.png')
 
 
 # Values for testing functions
