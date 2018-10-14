@@ -37,6 +37,10 @@ def closest_img(img, img_list):
 
 # Dict find cloesest colot
 def closest_dict(dic_list, color):
+<<<<<<< HEAD
+=======
+    random.shuffle(dic_list) 
+>>>>>>> master
     closest = dic_list[0]
     closest_distance = np.linalg.norm(np.subtract(color, closest))
     for dic_col in dic_list:
@@ -44,6 +48,11 @@ def closest_dict(dic_list, color):
         if temp_distance < closest_distance:
             closest = dic_col
             closest_distance = temp_distance
+<<<<<<< HEAD
+=======
+            if closest_distance < 10:
+                break
+>>>>>>> master
     return closest
 
 # Function for making list of all album files
@@ -144,11 +153,19 @@ def main_input(genre): # genre is a string, should match the directory name
 
 ### Values for testing functions
 #test_pic = cv2.imread('pictures/winrar.png')
+<<<<<<< HEAD
 #test_pic2 = cv2.imread('obama11.jpg')
+=======
+test_pic2 = cv2.imread('obama11.jpg')
+>>>>>>> master
 
 #print(os.getcwd())
 #print(os.listdir())
 #print(os.path.isfile('./output_pic.jpg'))
 #print(os.getcwd())
+<<<<<<< HEAD
 #main()
+=======
+main()
+>>>>>>> master
 
