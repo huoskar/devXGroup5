@@ -37,7 +37,7 @@ def closest_img(img, img_list):
 
 # Dict find cloesest colot
 def closest_dict(dic_list, color):
-    random.shuffle(dic_list) 
+    #random.shuffle(dic_list)
     closest = dic_list[0]
     closest_distance = np.linalg.norm(np.subtract(color, closest))
     for dic_col in dic_list:
