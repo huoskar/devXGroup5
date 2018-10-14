@@ -94,8 +94,8 @@ def main(): # Genre should be string equal to the directory names this is the in
     #input_dict = np.load(genre + '_dict.npy').item()
     chill_dict = np.load('chill_dict.npy').item()
     resized_img = resize_input_img(test_pic2) # test_pic2 for Obama
-    album_list = make_album_list() # 3 for input
-    print(len(album_list)) # Number of albums availale
+    #album_list = make_album_list() # 3 for input
+    #print(len(album_list)) # Number of albums availale
     output_chunk_list = [['' for _ in range(0,32)] for _ in range(0,32)]
     for x in range(0,32):
         for y in range(0,32):
@@ -118,11 +118,9 @@ def main(): # Genre should be string equal to the directory names this is the in
 
 # Main function, with input
 def main_input(genre): # genre is a string, should match the directory name
-    test_pic = cv2.imread('input_pic.jpg')
+    test_pic = cv2.imread('../input_pic.jpg')
     input_dict = np.load(genre + '_dict.npy').item()
     resized_img = resize_input_img(test_pic)
-    album_list = make_album_list_input(genre)
-    print(len(album_list)) # Number of albums availale
     output_chunk_list = [['' for _ in range(0,32)] for _ in range(0,32)]
     for x in range(0,32):
         for y in range(0,32):
@@ -141,8 +139,8 @@ def main_input(genre): # genre is a string, should match the directory name
                closest_image_filename = closest_image_filenames[rand]
             output_chunk_list[x][y] = closest_image_filename
     output_pic = fragments_to_output(output_chunk_list)
-    cv2.imwrite('result.jpg', output_pic)
-    return output_pic # Returns output pic.
+    cv2.imwrite('ouput_pic.jpg', output_pic)
+    # return output_pic # Returns output pic.
 
 ### Values for testing functions
 #test_pic = cv2.imread('pictures/winrar.png')
