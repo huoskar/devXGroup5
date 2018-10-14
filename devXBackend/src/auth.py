@@ -44,10 +44,10 @@ def download_image_from_url(image_url, full_file_name, dictionary):
 
     #color = color_pic.getpixel((0, 0))
     
-    # Split each color value into batch (of 16) 16x16x16 possible colors
-    color = np.round(np.array(color_pic))#/16)
+    # Split each color value into batch (of 1) 256x256x256 possible colors
+    color = np.round(np.array(color_pic))
     color = tuple(color[0][0])
-
+    
     # Add the file_name to the dictionary for the color combination
     if color in dictionary.keys():
         dictionary[color].append(full_file_name)
@@ -122,35 +122,46 @@ def update_all_general_images_and_dicts():
     #np.save('featured_dict.npy', featured_dict)     
     #print("Done with featured album covers")       
     
-    print("Downloading chill album covers") 
-    chill_dict = {}
-    download_album_categorical_playlists(dictionary = chill_dict, category = 'chill', folder_name = 'chill')
-    np.save('chill_dict.npy', chill_dict)  
-    print("Done with chill album covers")    
+    #print("Downloading chill album covers") 
+    #chill_dict = {}
+    #download_album_categorical_playlists(dictionary = chill_dict, category = 'chill', folder_name = 'chill')
+    #np.save('chill_dict.npy', chill_dict)  
+    #print("Done with chill album covers")    
+    
+    print("Downloading hiphop album covers") 
+    hiphop_dict = {}
+    download_album_categorical_playlists(dictionary = hiphop_dict, category = 'hiphop', folder_name = 'hiphop')
+    np.save('hiphop_dict.npy', hiphop_dict )  
+    print("Done with hiphop album covers")     
+    
+    print("Downloading rock album covers") 
+    rock_dict = {}    
+    download_album_categorical_playlists(dictionary = rock_dict, category = 'rock', folder_name = 'rock')
+    np.save('rock_dict.npy', rock_dict )  
+    print("Downloading rock album covers")     
+    
+    print("Downloading jazz album covers") 
+    jazz_dict = {}   
+    download_album_categorical_playlists(dictionary = jazz_dict, category = 'jazz', folder_name = 'jazz')
+    np.save('jazz_dict.npy', jazz_dict )  
+    print("Done with jazz album covers")
 
-    #hiphop_dict = {}
-    #download_album_categorical_playlists(dictionary = hiphop_dict, category = 'hiphop', folder_name = 'hiphop')
-    #np.save('hiphop_dict .npy', hiphop_dict )  
-    
-    #rock_dict = {}    
-    #download_album_categorical_playlists(dictionary = rock_dict, category = 'rock', folder_name = 'rock')
-    #np.save('rock_dict.npy', rock_dict )  
-    
-    #jazz_dict = {}   
-    #download_album_categorical_playlists(dictionary = jazz_dict, category = 'jazz', folder_name = 'jazz')
-    #np.save('jazz_dict.npy', jazz_dict )  
-    
-    #reggae_dict = {}    
-    #download_album_categorical_playlists(dictionary = reggae_dict, category = 'reggae', folder_name = 'reggae')
-    #np.save('reggae_dict.npy', reggae_dict )  
+    print("Downloading reggae album covers") 
+    reggae_dict = {}    
+    download_album_categorical_playlists(dictionary = reggae_dict, category = 'reggae', folder_name = 'reggae')
+    np.save('reggae_dict.npy', reggae_dict )  
+    print("Done with reggae album covers")
+
 
     #edm_dance_dict = {}    
     #download_album_categorical_playlists(dictionary = edm_dance_dict, category = 'edm_dance', folder_name = 'edm_dance')
     #np.save('edm_dance_dict.npy', edm_dance_dict )  
 
-    #rnb_dict = {}
-    #download_album_categorical_playlists(dictionary = rnb_dict, category = 'rnb', folder_name = 'rnb')
-    #np.save('rnb_dict.npy', rnb_dict )  
+    print("Downloading rnb album covers") 
+    rnb_dict = {}
+    download_album_categorical_playlists(dictionary = rnb_dict, category = 'rnb', folder_name = 'rnb')
+    np.save('rnb_dict.npy', rnb_dict )  
+    print("Done with rnb album covers")
 
     #classical_dict={}    
     #download_album_categorical_playlists(dictionary = classical_dict, category = 'classical', folder_name = 'classical')
@@ -160,14 +171,66 @@ def update_all_general_images_and_dicts():
     #download_album_categorical_playlists(dictionary = metal_dict, category = 'metal', folder_name = 'metal')
     #np.save('metal_dict.npy', metal_dict )  
 
-    #country_dict={}    
-    #download_album_categorical_playlists(dictionary = country_dict, category = 'country', folder_name = 'country')
-    #np.save('country_dict.npy', country_dict )  
+    print("Downloading country album covers")
+    country_dict={}    
+    download_album_categorical_playlists(dictionary = country_dict, category = 'country', folder_name = 'country')
+    np.save('country_dict.npy', country_dict )  
+    print("Done with country album covers")
+
+
+    print("Downloading pop album covers")
+    pop_dict={}    
+    download_album_categorical_playlists(dictionary = pop_dict, category = 'pop', folder_name = 'pop')
+    np.save('pop_dict.npy', pop_dict )  
+    print("Done with pop album covers")
 
     
     #chill_dict = np.load('chill_dict.npy').item()
     #country_dict = np.load('country_dict.npy').item()
+
+def update_all_folder_images_and_dicts():    
+    all_dict={} 
+    #all_dict = np.load('all_dict.npy').item()   
+    print("Downloading ALL album covers:")
+    print("Downloading hiphop album covers") 
     
+    download_album_categorical_playlists(dictionary = all_dict, category = 'hiphop', folder_name = 'hiphop_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Done with hiphop album covers")     
+    
+    print("Downloading rock album covers")    
+    download_album_categorical_playlists(dictionary = all_dict, category = 'rock', folder_name = 'rock_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Downloading rock album covers")     
+    
+    print("Downloading jazz album covers") 
+    download_album_categorical_playlists(dictionary = all_dict, category = 'jazz', folder_name = 'jazz_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Done with jazz album covers")
+
+    print("Downloading reggae album covers")     
+    download_album_categorical_playlists(dictionary = all_dict, category = 'reggae', folder_name = 'reggae_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Done with reggae album covers")
+
+    print("Downloading rnb album covers") 
+    download_album_categorical_playlists(dictionary = all_dict, category = 'rnb', folder_name = 'rnb_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Done with rnb album covers")
+ 
+
+    print("Downloading country album covers") 
+    download_album_categorical_playlists(dictionary = all_dict, category = 'country', folder_name = 'country_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Done with country album covers")
+
+
+    print("Downloading pop album covers") 
+    download_album_categorical_playlists(dictionary = all_dict, category = 'pop', folder_name = 'pop_all')
+    np.save('all_dict.npy', all_dict )  
+    print("Done with pop album covers")
+
+
 
 update_all_general_images_and_dicts()
 #download_image_from_url('https://i.scdn.co/image/46a1dcfa844e7fb2aeee759f70d333b9b95f0742', 'asd.jpg')
