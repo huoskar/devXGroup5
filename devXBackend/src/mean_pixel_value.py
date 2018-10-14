@@ -118,7 +118,7 @@ def main(): # Genre should be string equal to the directory names this is the in
 
 # Main function, with input
 def main_input(genre): # genre is a string, should match the directory name
-    test_pic = cv2.imread('../input_pic.jpg')
+    test_pic = cv2.imread('input_pic.jpg')
     input_dict = np.load(genre + '_dict.npy').item()
     resized_img = resize_input_img(test_pic)
     output_chunk_list = [['' for _ in range(0,32)] for _ in range(0,32)]
@@ -139,13 +139,16 @@ def main_input(genre): # genre is a string, should match the directory name
                closest_image_filename = closest_image_filenames[rand]
             output_chunk_list[x][y] = closest_image_filename
     output_pic = fragments_to_output(output_chunk_list)
-    cv2.imwrite('ouput_pic.jpg', output_pic)
+    cv2.imwrite('output_pic.jpg', output_pic)
     # return output_pic # Returns output pic.
 
 ### Values for testing functions
 #test_pic = cv2.imread('pictures/winrar.png')
-test_pic2 = cv2.imread('obama11.jpg')
+#test_pic2 = cv2.imread('obama11.jpg')
 
 #print(os.getcwd())
-main()
+#print(os.listdir())
+#print(os.path.isfile('./output_pic.jpg'))
+#print(os.getcwd())
+#main()
 

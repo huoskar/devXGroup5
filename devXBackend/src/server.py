@@ -5,6 +5,7 @@ import os
 from flask import Flask, flash, request, redirect, url_for,send_from_directory
 from werkzeug.utils import secure_filename
 import base64
+import mean_pixel_value
 
 UPLOAD_FOLDER = './'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -35,6 +36,10 @@ def upload_file():
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
+        genre = request.form['genre']
+        if genre == 'all':
+                genre = 'chill'
+        print(genre)
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -42,14 +47,14 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             #filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-            with open("sune2_copy.jpg", "rb") as imageFile:
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'input_pic.jpg'))
+            mean_pixel_value.main_input(genre)
+            with open("output_pic.jpg", "rb") as imageFile:
                 str = base64.b64encode(imageFile.read())
             return str
             #redirect(url_for('uploaded_file',
              #                       filename=filename))
 
-    
 
 if __name__ == "__main__":
 	app.run()
