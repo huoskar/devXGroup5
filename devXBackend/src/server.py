@@ -37,8 +37,6 @@ def upload_file():
             return redirect(request.url)
         file = request.files['file']
         genre = request.form['genre']
-        if genre == 'all':
-                genre = 'chill'
         print(genre)
         # if user does not select file, browser also
         # submit an empty part without filename
