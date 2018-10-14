@@ -36,7 +36,6 @@ def closest_img(img, img_list):
         if temp_distance < closest_distance:
             closest = imgs
             closest_distance = temp_distance
-
     return closest
 
 # Dict find cloesest colot
@@ -56,6 +55,22 @@ def make_album_list():
     files = os.listdir('chill')
     for fil in files:
         album_list.append(cv2.imread('chill/' + fil))
+    return album_list
+
+# Function with parameter
+def make_album_list3(genre):
+    album_list = []
+    files = os.listdir(genre)
+    for fil in files:
+        album_list.append(cv2.imread(genre + '/' + fil))
+    return album_list
+
+# List for 32 pixels
+def make_album_list2():
+    album_list = []
+    files = os.listdir('pictures') # featured 32 pixels?
+    for fil in files:
+        album_list.append(cv2.imread('pictures/' + fil))
     return album_list
 
 # Resize input file cv2 function, with a write, Maybe better with more pixels
@@ -78,32 +93,26 @@ def input_to_fragments(img):
 # Function
 def fragments_to_output(chunks):
     output_pic = np.zeros((512,512,3))
-    #print(chunks)
     for x in range(0, len(chunks)):
         for y in range(0, len(chunks[0])):
             current_chunk = cv2.imread(chunks[x][y])
-            #print(chunks[x][y])
             output_pic[(0 + x*16):(16 + x*16),(0 + y*16):(16 + y*16)] = current_chunk
 
     return output_pic
 
 # Main function, opacity
-def main():
+def main(): # Genre should be string equal to the directory names this is the input in main
+    #test_pic = cv2.imread('input_pic.jpg')
     chill_dict = np.load('chill_dict.npy').item()
-    resized_img = resize_input_img(test_pic2)
-    cv2.imwrite('test100.jpg', resized_img)
-    #image2 = Image.fromarray(resized_img.astype('uint8'))
-    #image2.save('asd.jpg')
-    album_list = make_album_list()
+    resized_img = resize_input_img(test_pic2) # test_pic2 for Obama
+    album_list = make_album_list() # 3 for input
     print(len(album_list)) # Number of albums availale
     output_chunk_list = [['' for _ in range(0,32)] for _ in range(0,32)]
     for x in range(0,32):
         for y in range(0,32):
             temp = resized_img[(0 + x*16):(16 + x*16),(0 + y*16):(16 + y*16)]
-            #image3 = Image.fromarray(temp.astype('uint8'))
-            #image3.save('' + str(x) + '_' + str(y) + '.jpg')
             color_pic = np.resize(temp, (1,1,3))
-            color = np.round(np.array(color_pic)/32)
+            color = np.round(np.array(color_pic))
             color = tuple(color[0][0])
             if color in chill_dict.keys():
                 closest_image_filenames = chill_dict[color]
@@ -114,14 +123,8 @@ def main():
                closest_image_filenames = chill_dict[new_color]
                rand = random.randint(0,len(closest_image_filenames) - 1)
                closest_image_filename = closest_image_filenames[rand]
-            #print(closest_image_filename)
             output_chunk_list[x][y] = closest_image_filename
-    #print(output_chunk_list)
     output_pic = fragments_to_output(output_chunk_list)
-    #print(len(output_chunk_list))
-    #print(len(output_chunk_list[0]))
-    image = Image.fromarray(output_pic.astype('uint8'))
-    image.save("result2.jpg")
     cv2.imwrite('result.jpg', output_pic)
 
 # Olofs modified old
@@ -156,13 +159,10 @@ def main2():
    final_pic = image_slicer.join(tiles)
    final_pic.save('result_slice.jpg')
 
-# Values for testing functions
-test_pic = cv2.imread('pictures/winrar.png')
-test_pic2 = cv2.imread('test2.jpg')
-#cv2.imshow('image',test_pic2)
-#cv2.waitKey(0)
-#cv2.destroyAllWindows()
+### Values for testing functions
+#test_pic = cv2.imread('pictures/winrar.png')
+test_pic2 = cv2.imread('obama11.jpg')
 
-print(os.getcwd())
+#print(os.getcwd())
 main()
 
