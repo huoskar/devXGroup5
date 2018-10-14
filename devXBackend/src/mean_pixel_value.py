@@ -72,40 +72,8 @@ def resize_album_img(img, w=32, h=32):
 def input_to_fragments(img):
     os.chdir('fragments_of_inputs')
     info = image_slicer.slice(img, 256)
-    print(info)
 
     return info
-def main2():
-    chill_dict = np.load('chill_dict.npy').item()
-    resize_input_img(test_pic2)
-    album_list = make_album_list()
-    print(len(album_list)) # Number of albums availale
-    big_tiles = image_slicer.slice('resize_input_image.jpg', 16)
-    for big_tile in big_tiles:
-        # resize_input_image.jpg
-        tiles = image_slicer.slice(big_tile.filename, 8) #16 för 16,16 , annars dir 1024
-        for tile in tiles:
-            if tile.filename == 'resize_input_image_09_02.png': # Stop the opening
-                break
-            print(tile.filename)
-            image = Image.open(tile.filename)
-            #closest_image = closest_img(pic, album_list)
-            color_pic = image.resize((1,1))
-            color = np.round(np.array(color_pic)/32)
-            color = tuple(color[0][0])
-            if color in chill_dict.keys():
-                closest_image_filenames = chill_dict[color]
-                rand = random.randint(0,len(closest_image_filenames) - 1)
-                closest_image_filename = closest_image_filenames[rand]
-            closest_image = Image.open(closest_image_filename)
-            closest_image.save(tile.filename)
-            tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
-        final_pic = image_slicer.join(tiles)
-        final_pic.save(big_tile.filename)
-        big_tile.image = Image.open(big_tile.filename)
-    final_ful_pic = image_slicer.join(big_tiles)
-    final_ful_pic.save('result.png')
-
 
 # Function
 def fragments_to_output(chunks):
@@ -156,7 +124,7 @@ def main():
     image.save("result2.jpg")
     cv2.imwrite('result.jpg', output_pic)
 
-    # Olofs old
+# Olofs modified old
 def main3():
    resized_img = resize_input_img(test_pic2)
    album_list = make_album_list()
@@ -171,6 +139,23 @@ def main3():
    output_pic = fragments_to_output(output_chunk_list)
    cv2.imwrite('result_main3.jpg', output_pic)
 
+# Olofs old with slice
+def main2():
+   resize_input_img(test_pic2)
+   album_list = make_album_list()
+   print(len(album_list)) # Number of albums available
+   tiles = image_slicer.slice('resize_input_image.jpg', 256) # wrong dir
+   for tile in tiles:
+       if tile.filename == 'resize_input_image_16_02.png': # Stop the opening
+           break
+       print(tile.filename)
+       pic = cv2.imread(tile.filename)
+       closest_image = closest_img(pic, album_list)
+       cv2.imwrite(tile.filename, closest_image)
+       tile.image = Image.open(tile.filename) # Probably cant open more than ca 200 tiles
+   final_pic = image_slicer.join(tiles)
+   final_pic.save('result_slice.jpg')
+
 # Values for testing functions
 test_pic = cv2.imread('pictures/winrar.png')
 test_pic2 = cv2.imread('test2.jpg')
@@ -179,5 +164,5 @@ test_pic2 = cv2.imread('test2.jpg')
 #cv2.destroyAllWindows()
 
 print(os.getcwd())
-main3()
+main()
 
