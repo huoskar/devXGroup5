@@ -17,9 +17,9 @@ def mean_pixel_value(img):
 
     #if img.shape == (32, 32, 3):
     #if img is not None:
-    avg_row_color = numpy.average(img, axis = 0)
+    avg_row_color = np.average(img, axis = 0)
 
-    avg_color = numpy.average(avg_row_color, axis=0)
+    avg_color = np.average(avg_row_color, axis=0)
    # else:
    #    print('Wrong img size')
 
@@ -29,10 +29,10 @@ def mean_pixel_value(img):
 def closest_img(img, img_list):
     input_bgr = mean_pixel_value(img)
     closest = img_list[0]
-    closest_distance = numpy.linalg.norm(input_bgr-mean_pixel_value(closest))
+    closest_distance = np.linalg.norm(input_bgr-mean_pixel_value(closest))
     for imgs in img_list:
         temp_bgr = mean_pixel_value(imgs)
-        temp_distance = numpy.linalg.norm(input_bgr-temp_bgr)
+        temp_distance = np.linalg.norm(input_bgr-temp_bgr)
         if temp_distance < closest_distance:
             closest = imgs
             closest_distance = temp_distance
@@ -42,13 +42,12 @@ def closest_img(img, img_list):
 # Dict find cloesest colot
 def closest_dict(dic_list, color):
     closest = dic_list[0]
-    closest_distance = numpy.linalg.norm(color - closest)
+    closest_distance = np.linalg.norm(np.subtract(color, closest))
     for dic_col in dic_list:
-        temp_distance = numpy.linalg.norm(dic_col - color)
+        temp_distance = np.linalg.norm(np.subtract(dic_col,color))
         if temp_distance < closest_distance:
             closest = dic_col
             closest_distance = temp_distance
-
     return closest
 
 # Function for making list of all album files
@@ -107,17 +106,35 @@ def main2():
     final_ful_pic = image_slicer.join(big_tiles)
     final_ful_pic.save('result.png')
 
+
+# Function
+def fragments_to_output(chunks):
+    output_pic = np.zeros((512,512,3))
+    #print(chunks)
+    for x in range(0, len(chunks)):
+        for y in range(0, len(chunks[0])):
+            current_chunk = cv2.imread(chunks[x][y])
+            #print(chunks[x][y])
+            output_pic[(0 + x*16):(16 + x*16),(0 + y*16):(16 + y*16)] = current_chunk
+
+    return output_pic
+
 # Main function, opacity
 def main():
     chill_dict = np.load('chill_dict.npy').item()
     resized_img = resize_input_img(test_pic2)
+    cv2.imwrite('test100.jpg', resized_img)
+    #image2 = Image.fromarray(resized_img.astype('uint8'))
+    #image2.save('asd.jpg')
     album_list = make_album_list()
     print(len(album_list)) # Number of albums availale
-    output_chunk_list = np.array((32,32))
+    output_chunk_list = [['' for _ in range(0,32)] for _ in range(0,32)]
     for x in range(0,32):
         for y in range(0,32):
             temp = resized_img[(0 + x*16):(16 + x*16),(0 + y*16):(16 + y*16)]
-            color_pic = temp.resize((1,1))
+            #image3 = Image.fromarray(temp.astype('uint8'))
+            #image3.save('' + str(x) + '_' + str(y) + '.jpg')
+            color_pic = np.resize(temp, (1,1,3))
             color = np.round(np.array(color_pic)/32)
             color = tuple(color[0][0])
             if color in chill_dict.keys():
@@ -125,16 +142,42 @@ def main():
                 rand = random.randint(0,len(closest_image_filenames) - 1)
                 closest_image_filename = closest_image_filenames[rand]
             else:
-               new_color = closest_dict(chill_dict.keys(), color)
+               new_color = closest_dict(list(chill_dict.keys()), color)
                closest_image_filenames = chill_dict[new_color]
-            output_chunk_list[x,y] = closest_image_filename
-    #final_ful_pic.save('result.png')
+               rand = random.randint(0,len(closest_image_filenames) - 1)
+               closest_image_filename = closest_image_filenames[rand]
+            #print(closest_image_filename)
+            output_chunk_list[x][y] = closest_image_filename
+    #print(output_chunk_list)
+    output_pic = fragments_to_output(output_chunk_list)
+    #print(len(output_chunk_list))
+    #print(len(output_chunk_list[0]))
+    image = Image.fromarray(output_pic.astype('uint8'))
+    image.save("result2.jpg")
+    cv2.imwrite('result.jpg', output_pic)
 
+    # Olofs old
+def main3():
+   resized_img = resize_input_img(test_pic2)
+   album_list = make_album_list()
+   output_chunk_list = [['' for _ in range(0,32)] for _ in range(0,32)]
+   for x in range(0,32):
+       for y in range(0,32):
+           temp = resized_img[(0 + x*16):(16 + x*16),(0 + y*16):(16 + y*16)]
+           #pic = cv2.imread(tile.filename)
+           closest_image = closest_img(temp, album_list)
+           output_chunk_list[x][y] = closest_image
+           #print(closest_image)
+   output_pic = fragments_to_output(output_chunk_list)
+   cv2.imwrite('result_main3.jpg', output_pic)
 
 # Values for testing functions
 test_pic = cv2.imread('pictures/winrar.png')
 test_pic2 = cv2.imread('test2.jpg')
+#cv2.imshow('image',test_pic2)
+#cv2.waitKey(0)
+#cv2.destroyAllWindows()
 
 print(os.getcwd())
-main()
+main3()
 
